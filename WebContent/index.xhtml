@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Duudle</title>
+</h:head>
+<h:body>
+	<h1>Duudle</h1>
+	
+	<h:form id="form">
+
+		<table border="1">
+		
+			<tr>
+				<th></th>
+				
+				<ui:repeat var="a" value="#{duudle.activityDatabase.activities}" >
+					<th>#{a.name}</th>
+				</ui:repeat>
+			</tr>
+			
+			<ui:repeat var="p" value="#{duudle.activityDatabase.participants}" >
+				<tr>
+					<td>#{p.name}</td>
+					
+					<ui:repeat var="a" value="#{duudle.activityDatabase.activities}" >
+						<td>#{p.isAttendingTo(a) ? 'YES' : 'NO'}</td>
+					</ui:repeat>
+				</tr>
+			</ui:repeat>
+		
+		
+			<tr>
+				<td>
+					<h:inputText value="#{duudle.participantName}">
+						<f:ajax event="keyup" render="form:button" />
+					</h:inputText>
+				</td>
+					
+				<ui:repeat value="#{duudle.activityDatabase.activities}" var="a">
+					<td>
+						<h:selectBooleanCheckbox value="#{duudle.selectedActivitiesForParticipant[a]}">
+							<f:ajax render="form:button" />
+						</h:selectBooleanCheckbox>
+					</td>
+				</ui:repeat>
+			</tr>
+	
+		</table>
+	
+		<h:commandButton id="button" value="Register" 
+			action="#{duudle.registerParticipantToActivities()}" 
+			disabled="#{!duudle.isFormReadyToSubmit()}"
+		/>
+	
+	</h:form>
+
+</h:body>
+</html>
